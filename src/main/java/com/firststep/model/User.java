@@ -2,6 +2,13 @@ package com.firststep.model;
 
 import javax.persistence.*;
 import java.util.Base64;
+/**
+ * Entity class for User. [Parent]
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 
 @MappedSuperclass
 public class User{

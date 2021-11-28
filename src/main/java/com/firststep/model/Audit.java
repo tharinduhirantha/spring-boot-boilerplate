@@ -2,7 +2,14 @@ package com.firststep.model;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Base64;
+
+/**
+ * Entity class for Audit
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 @MappedSuperclass
 public class Audit {
 

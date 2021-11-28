@@ -1,25 +1,23 @@
 package com.firststep.swagger;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.google.common.base.Predicate;
-
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.service.ApiInfo;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-//import static springfox.documentation.builders.PathSelectors.regex;
-import static com.google.common.base.Predicates.or;
+
 import static springfox.documentation.builders.PathSelectors.regex;
+
+//import static springfox.documentation.builders.PathSelectors.regex;
+
+/**
+ * Configurations for swagger.
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 
 @Configuration
 @EnableSwagger2

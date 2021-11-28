@@ -4,22 +4,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity class for Course
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 @Entity
 @Table
-
 public class Course extends Audit{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("ids")
+    @JsonProperty("id")
     private Long id;
     @Column
-    @JsonProperty("courseName")
+    @JsonProperty("course_name")
     private String courseName;
     @Column
-    @JsonProperty("courseDescription")
+    @JsonProperty("course_description")
     private String courseDescription;
     @Column
     @JsonProperty("status")
@@ -27,6 +34,9 @@ public class Course extends Audit{
     @ManyToOne
     @JoinColumn(name="instructor_id", referencedColumnName="id",nullable=false)
     private Instructor instructor;
+
+    @ManyToMany(mappedBy = "courses")
+    private Set<Student> students;
 
 //    @ManyToMany(fetch = FetchType.LAZY,
 //            cascade = {
@@ -75,5 +85,13 @@ public class Course extends Audit{
 
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 }

@@ -3,6 +3,13 @@ package com.firststep.model;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Entity class for Instructor
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 @Entity
 @Table
 public class Instructor extends User {

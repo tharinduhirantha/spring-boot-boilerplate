@@ -1,7 +1,14 @@
 package com.firststep.dto;
 
-import javax.persistence.Column;
+import com.firststep.model.User;
 
+/**
+ * DTO class for Course Model
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 public class CourseDTO {
 
     private Long id;
@@ -9,6 +16,7 @@ public class CourseDTO {
     private String courseDescription;
     private String status;
     private Long instructorId;
+    private User instructor;
 
     public Long getId() {
         return id;
@@ -48,5 +56,13 @@ public class CourseDTO {
 
     public void setInstructorId(Long instructorId) {
         this.instructorId = instructorId;
+    }
+
+    public User getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(User instructor) {
+        this.instructor = instructor;
     }
 }

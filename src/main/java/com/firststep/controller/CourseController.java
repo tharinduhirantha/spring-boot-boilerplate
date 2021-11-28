@@ -2,19 +2,25 @@ package com.firststep.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firststep.dto.CourseDTO;
-import com.firststep.model.Course;
-import com.firststep.model.Instructor;
-import com.firststep.model.Student;
+import com.firststep.dto.StudentDTO;
 import com.firststep.service.CourseService;
-import com.firststep.service.UserService;
-import com.google.gson.Gson;
-import org.json.simple.JSONArray;
+import com.firststep.utill.CommonUtill;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+
+/**
+ * Controller class for handle Course related API's
+ *
+ * @author  Tharindu Hirantha
+ * @version 1.0
+ * @since   2021/11/27
+ */
 
 @RestController
 @RequestMapping("/api/course")
@@ -23,33 +29,92 @@ public class CourseController {
     @Autowired
     CourseService courseService;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    final static Logger logger = Logger.getLogger(CourseService.class.getName());
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create", produces="application/json")
     public ResponseEntity signupStudent(@RequestBody CourseDTO course) {
-        courseService.saveOrUpdate(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Course Successfully Saved");
+
+        try {
+            courseService.saveOrUpdate(course);
+            return ResponseEntity.status(HttpStatus.CREATED).body(CommonUtill.Messages.SUCCESS);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
     }
 
-    @PostMapping("/start")
-    public ResponseEntity startCourse(@RequestParam Long courseId, @RequestParam String start) {
-        courseService.startCourse(courseId,start);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Course Successfully Started");
+    @PostMapping(value = "/start", produces="application/json")
+    public ResponseEntity startCourse(@RequestParam Long courseId) {
+
+        try {
+            courseService.startCourse(courseId);
+            return ResponseEntity.status(HttpStatus.OK).body(CommonUtill.Messages.SUCCESS);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
     }
 
-    @GetMapping("/instructor")
+    @PostMapping(value = "/cancel", produces="application/json")
+    public ResponseEntity cancelCourse(@RequestParam Long courseId) {
+
+        try {
+            courseService.cancelCourse(courseId);
+            return ResponseEntity.status(HttpStatus.OK).body(CommonUtill.Messages.SUCCESS);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
+    }
+
+    @GetMapping(value = "/instructor", produces="application/json")
     public ResponseEntity getInstructorCreatedCourses(@RequestParam Long instructorId) {
-        List<Course> courses = courseService.getCousebyInstructorId(instructorId);
-        String json = null;
-        Gson gson = new Gson();
-        gson.toJson(courses);
-//        try {
-//             json = objectMapper.writeValueAsString(courses);
-//            System.out.println(json);
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-        return ResponseEntity.status(HttpStatus.OK).body( gson.toJson(courses));
+
+        try {
+            ArrayList<CourseDTO> courses = courseService.getCousebyInstructorId(instructorId);
+            String json = MAPPER.writeValueAsString(courses);
+
+            return ResponseEntity.status(HttpStatus.OK).body(json);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
+    }
+
+    @PostMapping(value = "/enroll", produces="application/json")
+    public ResponseEntity enrollCourse(@RequestParam  Long [] courseIds, @RequestParam Long studentId) {
+        try {
+            courseService.enroll(courseIds,studentId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(CommonUtill.Messages.SUCCESS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex.getStackTrace());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
+    }
+
+    @GetMapping(value = "/student", produces="application/json")
+    public ResponseEntity getEnrolledCoursedForStudent(@RequestParam Long studentId) {
+        try {
+            StudentDTO dto = courseService.getEnrolledCoursedForStudent(studentId);
+            String json = MAPPER.writeValueAsString(dto);
+            return ResponseEntity.status(HttpStatus.OK).body(json);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex.getStackTrace());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
+    }
+
+    @GetMapping(value = "/all", produces="application/json")
+    public ResponseEntity geAllCourses() {
+        try {
+            Set<CourseDTO> list = courseService.geAllCourses();
+            String json = MAPPER.writeValueAsString(list);
+            return ResponseEntity.status(HttpStatus.OK).body(json);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex.getStackTrace());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
     }
 
 }

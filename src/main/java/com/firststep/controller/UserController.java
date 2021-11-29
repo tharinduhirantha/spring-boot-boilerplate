@@ -46,7 +46,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/student", produces="application/json")
+    @GetMapping(value = "/student", produces="application/json")
     public ResponseEntity getStudent(@RequestParam Long id) {
 
         try {

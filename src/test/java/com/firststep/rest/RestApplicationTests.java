@@ -7,30 +7,22 @@ import com.firststep.model.Student;
 import com.firststep.service.CourseService;
 import com.firststep.service.UserService;
 import com.firststep.utill.CommonUtill;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.json.simple.JSONObject;
-import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static io.restassured.RestAssured.*;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 
-
-import java.io.IOException;
-
-import io.restassured.RestAssured.*;
-
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -104,7 +96,11 @@ class RestApplicationTests {
 		auth = userService.login("will@gmail.com","invalid","S");
 		assertEquals(0,auth);
 	}
-
+	@Test
+	public void getCousebyInstructorId() throws Exception {
+		ArrayList<CourseDTO> courses = courseService.getCousebyInstructorId(2l);
+		assertEquals(1,courses.size());
+	}
 	@Test
 	public void saveCourse() throws Exception {
 		CourseDTO course = new CourseDTO();
@@ -124,4 +120,6 @@ class RestApplicationTests {
 		Course model = courseService.getCourse(1L);
 		assertEquals(CommonUtill.CouseStatus.START,model.getStatus());
 	}
+
+
 }

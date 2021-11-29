@@ -140,4 +140,16 @@ public class CourseService {
         }
         return returnList;
     }
+
+    public Set<StudentDTO> geAStudentsForCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId).get();
+        Set<StudentDTO> returnList = new HashSet<>();
+
+        for (Student student: course.getStudents()) {
+            returnList.add(transformer.convertStudentToDTO(student));
+        }
+
+        return returnList;
+
+    }
 }

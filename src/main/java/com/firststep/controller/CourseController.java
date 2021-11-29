@@ -33,7 +33,7 @@ public class CourseController {
     final static Logger logger = Logger.getLogger(CourseService.class.getName());
 
     @PostMapping(value = "/create", produces="application/json")
-    public ResponseEntity signupStudent(@RequestBody CourseDTO course) {
+    public ResponseEntity createCourse(@RequestBody CourseDTO course) {
 
         try {
             courseService.saveOrUpdate(course);
@@ -79,7 +79,7 @@ public class CourseController {
         }
     }
 
-    @PostMapping(value = "/enroll", produces="application/json")
+    @PostMapping(value = "/student/enroll", produces="application/json")
     public ResponseEntity enrollCourse(@RequestParam  Long [] courseIds, @RequestParam Long studentId) {
         try {
             courseService.enroll(courseIds,studentId);
@@ -92,7 +92,7 @@ public class CourseController {
     }
 
     @GetMapping(value = "/student", produces="application/json")
-    public ResponseEntity getEnrolledCoursedForStudent(@RequestParam Long studentId) {
+    public ResponseEntity getStudentEnrolledCourses(@RequestParam Long studentId) {
         try {
             StudentDTO dto = courseService.getEnrolledCoursedForStudent(studentId);
             String json = MAPPER.writeValueAsString(dto);
@@ -108,6 +108,19 @@ public class CourseController {
     public ResponseEntity geAllCourses() {
         try {
             Set<CourseDTO> list = courseService.geAllCourses();
+            String json = MAPPER.writeValueAsString(list);
+            return ResponseEntity.status(HttpStatus.OK).body(json);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex.getStackTrace());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        }
+    }
+
+    @GetMapping(value = "/enroll/student", produces="application/json")
+    public ResponseEntity geAStudentsAssignedForCourses(@RequestParam Long courseId) {
+        try {
+            Set<StudentDTO> list = courseService.geAStudentsForCourse(courseId);
             String json = MAPPER.writeValueAsString(list);
             return ResponseEntity.status(HttpStatus.OK).body(json);
         } catch (Exception ex) {
